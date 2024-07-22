@@ -2,6 +2,4 @@ tunnels:
   rdp:
     addr: 3389
     proto: tcp
-  web:
-    addr: 3000
-    proto: http
+
