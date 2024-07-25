@@ -38,7 +38,7 @@ jobs:
         Invoke-WebRequest -Uri $url -OutFile $output
 
     - name: Install AMD Driver
-      run: cmd.exe /c amd_installer.exe /INSTALL /SILENT /NOREBOOT
+      run: cmd.exe /c amd-software-adrenalin-edition-24.7.1-minimalsetup-240718_web.exe /INSTALL /SILENT /NOREBOOT
 
     - name: Create Tunnel
       run: .\ngrok.exe tcp 3389
