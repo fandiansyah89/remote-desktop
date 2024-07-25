@@ -11,25 +11,33 @@ jobs:
     - name: Download ngrok
       run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
     - name: Extract ngrok
-      run: Expand-Archive ngrok.zip
+      run: Expand-Archive ngrok.zip -DestinationPath .
+
     - name: Authenticate ngrok
       run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    
     - name: Enable Terminal Services
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+    
     - name: Enable Remote Desktop Firewall
       run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    
     - name: Enable RDP User Authentication
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
+    
     - name: Set RDP User Password
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
 
     - name: Download AMD Driver
-      run: Invoke-WebRequest -Uri "https://drivers.amd.com/drivers/installer.exe" -OutFile "amd_installer.exe"
-      
+      run: |
+        $url = "https://drivers.amd.com/drivers/installer.exe"
+        $output = "amd_installer.exe"
+        Invoke-WebRequest -Uri $url -OutFile $output
+
     - name: Install AMD Driver
-      run: Start-Process -FilePath ".\amd_installer.exe" -ArgumentList "/INSTALL /SILENT" -Wait
+      run: cmd.exe /c amd_installer.exe /INSTALL /SILENT /NOREBOOT
 
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 3389
