@@ -34,7 +34,7 @@ jobs:
     - name: Download AMD Driver
       run: |
         $url = "https://drivers.amd.com/drivers/installer/24.10/whql/amd-software-adrenalin-edition-24.7.1-minimalsetup-240718_web.exe"
-        $output = "amd_installer.exe"
+        $output = "amd-software-adrenalin-edition-24.7.1-minimalsetup-240718_web.exe"
         Invoke-WebRequest -Uri $url -OutFile $output
 
     - name: Install AMD Driver
